@@ -3,7 +3,8 @@ $apps = @(
         @{name = "PostgreSQL.PostgreSQL.17"},
         @{name = "Neovim.Neovim"},
         @{name = "junegunn.fzf"},
-        @{name = "JesseDuffield.lazygit"}
+        @{name = "JesseDuffield.lazygit"},
+        @{name = "DEVCOM.JetBrainsMonoNerdFont"}
         );
 
 Write-host "Winget dev deps"
@@ -44,16 +45,23 @@ if($isElixirOTPInstalled){
 }
 else {
     Write-host "Elixir/OTP not installed"
-        Write-host "Trying to install Elixir from curl"
-        try {
-            curl.exe -fsSO https://elixir-lang.org/install.bat
-                .\install.bat elixir@1.18.2 otp@27.1.2
-                $installs_dir = "$env:USERPROFILE\.elixir-install\installs"
-                $env:PATH = "$installs_dir\otp\27.1.2\bin;$env:PATH"
-                $env:PATH = "$installs_dir\elixir\1.18.2-otp-27\bin;$env:PATH"
+        $installEOTP = Read-host "Try to install Elixir/OTP? [Y]es or [N]"
+        if($installEOTP.ToLower() -eq "y"){
+            Write-host "Trying to install Elixir from curl"
+                try {
+                    curl.exe -fsSO https://elixir-lang.org/install.bat
+                        .\install.bat elixir@1.18.2 otp@27.1.2
+                        $installs_dir = "$env:USERPROFILE\.elixir-install\installs"
+                        $env:PATH = "$installs_dir\otp\27.1.2\bin;$env:PATH"
+                        $env:PATH = "$installs_dir\elixir\1.18.2-otp-27\bin;$env:PATH"
+                }
+            catch {
+                Write-host "Could not install Elixir"
+            }
         }
-    catch {
-        Write-host "Could not install Elixir"
-    }
+        else {
+                Write-host "Skipping Elixir install, re-run this script if you wanted to install it -\_(~-~)_/-"
+            }
 }
+Write-host "I grab my .dotfiles from https://github.com/DoggettCK/dotfiles, mans a 1e10x dev"
 
